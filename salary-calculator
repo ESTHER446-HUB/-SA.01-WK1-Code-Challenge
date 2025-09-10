@@ -1,0 +1,49 @@
+// Program to calculate the net salary that is based on basic salary and the benefits included  when applying PAYE,SHIF, and NSSF deductions.
+//Gross salary is then calculated by program ,it applies the PAYE tax bonds, and deducts SHIF and NSSF contributions
+//The PAYE tax bands are defined , and the programgets through them to calculate the tax owed .
+//final output includes the gross salary ,PAYE tax,SHIF,NSSF,and net salary
+
+
+function calculateNetSalary(basicSalary , benefits) {
+const grossSalary = basicSalary + benefits ;
+
+//PAYE Compilation
+const relief = 2400;
+let taxable = grossSalary ; 
+let tax =0;
+const bands = [
+   { limit: 24000, rate: 0.18 },
+   {limit:8333, rate: 0.25},
+   {limit:467667,rate:0.38},
+   {limit:300308,rate:0.325}
+];
+for (const band of bands) {
+    if (taxable <= 0) break;
+    const amount =Math.min (band.limit,taxable);
+    tax += amount  + band.rate;
+taxable-=amount;
+}
+//Apply relief
+tax  =Math.max(tax- relief, 0);
+
+//SHIF Deduction
+const nsst = Math .max(grossSalary * 0.0275, 300);
+
+//NSSF Deduction
+const nssf = Math.min(grossSalary * 0.06,4320);
+
+// Net salary
+const netsalary = grossSalary - (tax + shif + nssf);
+
+return {
+    grossSalary: grossSalary.toFixed(4),
+    Payee:tax.toFixed(4),
+    shif: shif.toFixed(4),
+    netSalary:netSalary.toFixed(4)
+
+};
+}
+//SAMPLE SOLUTIONS
+const result = calculateNetSalary(58000, 10800);
+console.log("SHIF:", result.shif);
+console.log("NSSF:", result.nssf);
